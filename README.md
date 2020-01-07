@@ -2,7 +2,7 @@
 
 This is a program that adapts the [8 queens puzzle](https://en.wikipedia.org/wiki/Eight_queens_puzzle) to arbitrary NxN board with N queens.
 
-from [8 queens puzzle]([https://en.wikipedia.org/wiki/Eight_queens_puzzle](https://en.wikipedia.org/wiki/Eight_queens_puzzle):
+from [8 queens puzzle](https://en.wikipedia.org/wiki/Eight_queens_puzzle) :
 
 > The eight queens puzzle is an example of the more general ***n* queens problem** of placing *n* non-attacking queens on an *n*×*n* chessboard, for which solutions exist for all natural numbers *n* with the exception of *n* = 2 and *n* = 3.
 
