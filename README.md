@@ -27,7 +27,7 @@ optional arguments:
 # Demo
 
 ```bash
-python3 queens.py 20 -n -o out.jpg
+python3 queens.py 20 -n -o out.png
 ```
 
 ![20 by 20 chess board with 20 queens that can't attack each other](out.png)

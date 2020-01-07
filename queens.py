@@ -1,9 +1,13 @@
 #! /usr/bin/env python3
+
+#random to pick queen positions randomly
 import random
 import argparse
 
-#for drawing the image after putqueen generates solutions
+#Image saving, loading, manipulation etc...
 from PIL import Image
+
+#for drawing the board
 import numpy as np
 
 def putqueen(board, queens_placed=0, desired_queens=20):
