@@ -1,14 +1,12 @@
+#! /usr/bin/env python3
 import random
 import argparse
-
-#can be adapted to any size
-BOARD_SIZE = 20
 
 #for drawing the image after putqueen generates solutions
 from PIL import Image
 import numpy as np
 
-def putqueen(board, queens_placed, desired_queens=BOARD_SIZE):
+def putqueen(board, queens_placed=0, desired_queens=20):
     if queens_placed>=desired_queens:
         return True
 
@@ -52,49 +50,61 @@ def putqueen(board, queens_placed, desired_queens=BOARD_SIZE):
     else:
         return False
 
-def draw_board(queens, board_size=BOARD_SIZE):
+def draw_board(queens, board_size=20, display=True, out='out.png'):
 
     #draw the board
-    board = np.full((64*board_size, 64*board_size,3),0, dtype=np.uint8)
-    wb = np.full((64,64,3), 255, dtype=np.uint8)
-    
+    black = [0,0,0,255]
+    white = [255,255,255,255]
 
+    board = np.full((64*board_size, 64*board_size, 4),black , dtype=np.uint8)
+    
+    wb = np.full((64,64,4), white, dtype=np.uint8)
+    
     #draw alternating white and black
     for i in range(board_size):
         for j in range(board_size):
             if (i+j) % 2 == 0:
                 board[j*64:j*64+64, i*64:i*64+64] = wb
     
-    #draw queens
-    queen_img = Image.open('45px-Chess_qlt45.svg.png').convert('RGB')
-    queen_img_arr = np.asarray(queen_img)
-
-    for queen in queen_locations:
-        #12 is padding for the queen image
-        xpos = queen[0]*64 + 12
-        ypos = queen[1]*64 + 12
-        #draw the queen in the block
-        board[ypos:ypos+45, xpos:xpos+45] = queen_img_arr
-
     #numpy to image
-    board_img = Image.fromarray(board, 'RGB')
+    board_img = Image.fromarray(board, 'RGBA')
+
+    #draw queens
+    queen_img = Image.open('45px-Chess_qlt45.svg.png').convert('RGBA')
+
+    for queen in queens:
+        #10 is padding for the queen image
+        xpos = queen[0]*64 + 10
+        ypos = queen[1]*64 + 10
+        offset = (xpos, ypos)
+        #draw the queen in the block, and donot draw alpha
+        board_img.paste(queen_img, offset, queen_img)
     
     #save image to out.png and show
-    board_img.save('out.png')
-    board_img.show()
+    board_img.save(out,mode='PNG')
+    if display:
+        board_img.show()
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Program to compute a random 20 queens solution.')
+    parser = argparse.ArgumentParser(description='Program to compute a random N queens solution.')
+    parser.add_argument('size',type=int, nargs='?',default=20, help='Board size and number of queens, default is 20')
+    parser.add_argument('-n','--no-display',action='store_true', help='Donot display, just save')
+    parser.add_argument('-o','--output', help='Output image name, default out.png', default='out.png')
+    return parser.parse_args()
 
 def main():
+    result = parse_args()
     #get the initial board
-    initial_board = [(i,j) for i in range(BOARD_SIZE) for j in range(BOARD_SIZE)]
+    initial_board = [(i,j) for i in range(result.size) for j in range(result.size)]
 
     #get the queen locations
-    queen_locations = putqueen(board=initial_board, queens_placed=0)
+    queen_locations = putqueen(board=initial_board, desired_queens=result.size)
 
     #print the locations
     print(queen_locations)
 
     #draw board with queens and display them
-    draw_board(queen_locations)
+    draw_board(queen_locations, board_size=result.size, out= result.output,  display= not result.no_display)
+
+if __name__ == "__main__":
+    main()
